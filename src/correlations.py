@@ -18,8 +18,6 @@ elections = [
 	{"year": 1952, "winner": "Dwight D. Eisenhower", "loser": "Adlai Stevenson"},
 	{"year": 1948, "winner": "Harry Truman", "loser": "Thomas E. Dewey"},
 	{"year": 1944, "winner": "Franklin D. Roosevelt", "loser": "Thomas E. Dewey"},
-	{"year": 1940, "winner": "Franklin D. Roosevelt", "loser": "Wendell Wilkie"},
-	{"year": 1936, "winner": "Franklin D. Roosevelt", "loser": "Alf Landon"}
 ]
 
 candidates = [
@@ -49,8 +47,6 @@ candidates = [
 	{"name": "Barry Goldwater", "party": "R", "won": False},
 	{"name": "Adlai Stevenson", "party": "D", "won": False},
 	{"name": "Thomas E. Dewey", "party": "R", "won": False},
-	{"name": "Wendell Wilkie", "party": "R", "won": False},
-	{"name": "Alf Landon", "party": "R", "won": False}
 ]
 
 def getPath(query, name):
@@ -66,8 +62,8 @@ def pastElectionInfo(query):
 	for candidate in candidates:
 		thisPath = getPath(query, candidate["name"])
 		paths.append({"name": candidate["name"], "dist": thisPath["dist"], "path": thisPath["path"]})
-	demrepStats = {"dempath": 0, "reppath": 0}
-	winloseStats = {"winpath": 0, "losepath": 0}
+	demrepStats = {"avgDemPath": 0, "avgRepPath": 0}
+	winloseStats = {"avgWinPath": 0, "avgLosePath": 0}
 	dems = 0
 	reps = 0
 	wins = 0
@@ -76,25 +72,23 @@ def pastElectionInfo(query):
 		for candidate in candidates:
 			if candidate["name"] == path["name"]:
 				if candidate["party"] == "R":
-					demrepStats["reppath"] += path["dist"]
-					++reps
+					demrepStats["avgRepPath"] += path["dist"]
+					reps += 1
 				else:
-					demrepStats["dempath"] += path["dist"]
-					++dems
+					demrepStats["avgDemPath"] += path["dist"]
+					dems += 1
 				if candidate["won"]:
-					winloseStats["winpath"] += path["dist"]
-					++wins
+					winloseStats["avgWinPath"] += path["dist"]
+					wins += 1
 				else:
-					winloseStats["losepath"] += path["dist"]
-					++losses
+					winloseStats["avgLosePath"] += path["dist"]
+					losses += 1
 				break
-	demrepStats["dempath"] /= dems
-	demrepStats["reppath"] /= reps
-	winloseStats["winpath"] /= wins
-	winloseStats["losepath"] /= losses
-	return {demrepStats, winloseStats}
-	# TODO: analyze based on party
-	# TODO: analyze based on win/lose
+	demrepStats["avgDemPath"] /= dems
+	demrepStats["avgRepPath"] /= reps
+	winloseStats["avgWinPath"] /= wins
+	winloseStats["avgLosePath"] /= losses
+	return {"partyStats": demrepStats, "winStats": winloseStats}
 
 if __name__ == "__main__":
     print pastElectionInfo("girl scout cookies")
