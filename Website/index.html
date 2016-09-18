@@ -360,23 +360,33 @@
 				$(document).ready(function(){
 					function wiki() {
 							var source = $('#source').val();
-							var clinton = {};
-							var trump = {};
+							var res = {}
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
-    						dataType: 'jsonp',
-								success: function(result){console.log(result);}
+    						dataType: 'json',
+								success: function(result){
+									res.clinton = clinton;
+									if (res.trump) {
+										console.log(res);
+									}
+									console.log(result);
+								}
 							});
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
-    						dataType: 'jsonp',
-								success: function(result){console.log(result);}
+    						dataType: 'json',
+								success: function(result){
+									res.trump = trump;
+									if (res.clinton) {
+										console.log(res);
+									}
+									console.log(result);
+								}
 							});
-							console.log(res);
 					}
 			    $('#go').on('click',function(){
 			        wiki();
