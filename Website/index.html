@@ -261,8 +261,7 @@
 										<div class="row">
 											<div class="column width-12">
 												<h1 class="tms-caption title-xlarge color-white lspacing-medium"
-													data-animate-in="preset:scaleOut;duration:1000ms;"
-												>
+													data-animate-in="preset:scaleOut;duration:1000ms;">
 													Hillary vs. Trump
 												</h1>
 												<div class="clear"></div>
@@ -303,8 +302,8 @@
 											<h2 class="mb-30">Try it yourself!</h2>
 										</div>
 										<div class="column width-8">
-                    	<input type="text" id="source" style="color: black !important;"></input>
-                      <input type="submit" value="Let's go!" id="go" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
+											<input type="text" id="source" style="color: black !important;"></input>
+											<input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -318,17 +317,24 @@
 				<!-- Stat Section 1 -->
 
 				<!-- Portfolio Content -->
-				<section class="section-block replicable-content no-padding-bottom">
+				<section class="section-block replicable-content no-padding-bottom" id="results">
 					<div class="row">
-						<div class="column width-6 offset-3 center">
-							<h2 class="mb-50">Results</h2>
+						<div class="column width-12">
+							<h2 class="mb-50" style="text-align: center; margin-top: -5%;">Results</h2>
+							<div class="column width-6">
+								<h2 class="mb-30" style="text-align: center; color-blue;">HILLARY</h2>
+								 <ul class="timeline vertical-indication" id="Hillary-results">
+								 </ul>
+							</div>
+							<div class="column width-6">
+								<h2 class="mb-30 color-blue" style="text-align: center; color-blue;">TRUMP</h2>
+								 <ul class="timeline vertical-indication" id="Trump-results">
+								 </ul>
+							</div>
 						</div>
 					</div>
 				</section>
 				<!-- Portfolio Content End -->
-
-
-
 			</div>
 			<!-- Content End -->
 
@@ -340,10 +346,8 @@
 							<div class="widget">
 								<h4>A HackMIT Project</h4>
 								<p>This project is solely for entertainment purposes and not to be taken seriously.</p>
-
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</footer>
@@ -358,34 +362,37 @@
 	<script src="js/timber.master.min.js"></script>
     <script>
 				$(document).ready(function(){
+
+					function fillBlock(id) {
+						return function (result) {
+							var container = document.getElementById(id);
+							function block(count, article) {
+								return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>Article ' +
+								count + '</h5><div class="timeline-description column width-9"><h5 href= ' +
+								article + '>' +
+								article'</h5></div></div></div></li>';
+							}
+							for (var i = 0, var len = result.path.length; i < len; i++) {
+								container.innerHTML += block(i, result.path[i]);
+							}
+						}
+					}
+
 					function wiki() {
 							var source = $('#source').val();
-							var res = {}
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
-    						dataType: 'json',
-								success: function(result){
-									res.clinton = result.clinton;
-									if (res.trump) {
-										console.log(res);
-									}
-									console.log(result);
-								}
+    							dataType: 'json',
+								success: fillBlock('Hillary-results')
 							});
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
-    						dataType: 'json',
-								success: function(result){
-									res.trump = result.trump;
-									if (res.clinton) {
-										console.log(res);
-									}
-									console.log(result);
-								}
+    							dataType: 'json',
+								success: fillBlock('Trump-results')
 							});
 					}
 			    $('#go').on('click',function(){
