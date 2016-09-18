@@ -16,7 +16,7 @@ def hillaryArticles(query):
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Hillary Clinton"))   
-	q.addRequestedResult(RequestArticlesInfo(count=50))
+	q.addRequestedResult(RequestArticlesInfo(count=20))
 	results = (er.execQuery(q))['articles']['results']
 	queryCount = 0
 	for result in results:
@@ -32,8 +32,8 @@ def hillaryArticles(query):
 		text = '\n'.join(chunk for chunk in chunks if chunk)
 
 		# look for query
-		if query in text:
-			++queryCount
+		if text.find(query):
+			queryCount += 1
 
 	return queryCount
 
@@ -42,7 +42,7 @@ def trumpArticles(query):
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Donald Trump"))   
-	q.addRequestedResult(RequestArticlesInfo(count=50))
+	q.addRequestedResult(RequestArticlesInfo(count=20))
 	results = (er.execQuery(q))['articles']['results']
 	queryCount = 0
 	for result in results:
@@ -58,31 +58,43 @@ def trumpArticles(query):
 		text = '\n'.join(chunk for chunk in chunks if chunk)
 
 		# look for query
-		if query in text:
-			++queryCount
+		if text.find(query):
+			queryCount += 1
 
 	return queryCount
 
-if __name__ == "__main__":
-    print hillaryArticles("bomb")
-    print trumpArticles("bomb")
-
 ####################
+
+# Determine occurrence of Hillary or Trump in news of period of time
 
 start = unicode(date.today() + timedelta(-30))
 
-er = EventRegistry()
-q = GetCounts(er.getConceptUri("Clinton"),
-              source = "news",
-              startDate = start, endDate = end)
-print er.execQuery(q)
+def hillaryViews():
+	er = EventRegistry()
+	q = GetCounts(er.getConceptUri("Clinton"),
+	              source = "news",
+	              startDate = start, endDate = end)
+	counts = []
+	results = (er.execQuery(q))['http://en.wikipedia.org/wiki/Hillary_Rodham_Clinton']
+	for res in results:
+		counts.append(res['count'])
+	return counts
 
-# Determine occurrence of Hillary or Trump in news of period of time
-er = EventRegistry()
-q = GetCounts(er.getConceptUri("Trump"),
-              source = "news",
-              startDate = start, endDate = end)
-print er.execQuery(q)
+def trumpViews():
+	er = EventRegistry()
+	q = GetCounts(er.getConceptUri("Trump"),
+	              source = "news",
+	              startDate = start, endDate = end)
+	counts = []
+	results = (er.execQuery(q))['http://en.wikipedia.org/wiki/Donald_Trump']
+	for res in results:
+		counts.append(res['count'])
+	return counts
 
 
+if __name__ == "__main__":
+    print hillaryArticles("candidate")
+    print trumpArticles("candidate")
+    print hillaryViews()
+    print trumpViews()
 
