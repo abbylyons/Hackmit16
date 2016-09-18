@@ -365,8 +365,7 @@
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
-								jsonpCallback: 'callback',
-    						dataType: 'jsonp',
+    						dataType: 'json',
 								success: function(result){
 									res.clinton = result.clinton;
 									if (res.trump) {
@@ -379,8 +378,7 @@
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
-								jsonpCallback: 'callback',
-    						dataType: 'jsonp',
+    						dataType: 'json',
 								success: function(result){
 									res.trump = result.trump;
 									if (res.clinton) {
