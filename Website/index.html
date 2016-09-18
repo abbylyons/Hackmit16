@@ -303,10 +303,8 @@
 											<h2 class="mb-30">Knock yourself <br>Out</h2>
 										</div>
 										<div class="column width-8">
-											<form>
-												<input type="text" id="source" style="color: black !important;"></input>
-												<input type="submit" value="Let's go!" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
-											</form>
+                                            <input type="text" id="source" style="color: black !important;"></input>
+                                            <input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -415,5 +413,21 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maps.googleapis.com/maps/api/js?v=3"></script>
 	<script src="js/timber.master.min.js"></script>
+    <script>
+        function wiki() {
+            var source = ${'#source'}
+            var clinton = {}.val();
+            var trump = {};
+            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+                success: function(result){clinton = result;}});
+            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+                success: function(result){trump = result;}});
+            var res = {
+                clinton: clinton,
+                trump: trump
+            };
+            console.log(res);
+        }    
+    </script>
 </body>
 </html>
