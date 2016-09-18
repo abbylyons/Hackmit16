@@ -305,9 +305,9 @@
 				<!-- Portfolio Content -->
 				<section class="section-block replicable-content no-padding-bottom" id="results">
 					<div class="row">
-						<span class="mb-50 column width-12" style="text-align: center;" id="loader"></span>
-						<div class="column width-12">
-							<h2 class="mb-50" style="text-align: center; margin-top: -5%;">Results</h2>
+								
+						<div class="column width-12" style="margin-top: -5%;">
+							<span class="mb-50" style="text-align: center;" id="loader"></span>
 							<div class="column width-6">
 								<h2 class="mb-30 color-blue" style="text-align: center;">HILLARY</h2>
 								 <ul class="timeline vertical-indication" id="Hillary-results">
@@ -351,7 +351,7 @@
 				$(document).ready(function(){
 
 					function wiki() {
-						document.getElementById('loader').innerHTML = "<h1>Searching...</h1>";
+						document.getElementById('loader').innerHTML = "<h1>Searching...</h1><br />";
 						// document.getElementById('results').scrollIntoView({block: 'start', behavior: 'smooth'});
 						function block(count, article, color) {
 							return(
@@ -369,7 +369,7 @@
 
 						function fillBlock(id, result, color) {
 							var container = document.getElementById(id);
-							container.innerHTML = '<h5 class="color-' + color + '"> Average distance: ' + result.avg + '</h5>';
+							container.innerHTML = '<h5 class="color-' + color + '"> Average degrees of seperation: ' + Math.round(result.avg) + '</h5>';
 							container.innerHTML += '<h5 class="color-' + color + '"> Shortest path:</h5>';
 							var len = result.path.length;
 							for (var i = 0; i < len; i++) {
@@ -386,7 +386,7 @@
 								crossDomain: true,
 								dataType: 'json',
 								success: function(result) {
-									fillBlock('Hillary-results', result, 'blue');
+									fillBlock('Hillary-results', result, 'charcoal');
 								}
 							});
 							$.ajax({
@@ -395,7 +395,7 @@
 								crossDomain: true,
 								dataType: 'json',
 								success: function (result) {
-									fillBlock('Trump-results', result, 'red');
+									fillBlock('Trump-results', result, 'charcoal');
 								}
 							});
 						}
