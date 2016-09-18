@@ -367,14 +367,16 @@
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
     						dataType: 'jsonp',
-								success: function(result){clinton = result;}
+								beforeSend: setHeader,
+								success: function(result){console.log(result);}
 							});
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
     						dataType: 'jsonp',
-								success: function(result){trump = result;}
+								beforeSend: setHeader,
+								success: function(result){console.log(result);}
 							});
 							console.log(res);
 					}
