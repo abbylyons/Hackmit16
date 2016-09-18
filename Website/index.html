@@ -261,8 +261,7 @@
 										<div class="row">
 											<div class="column width-12">
 												<h1 class="tms-caption title-xlarge color-white lspacing-medium"
-													data-animate-in="preset:scaleOut;duration:1000ms;"
-												>
+													data-animate-in="preset:scaleOut;duration:1000ms;">
 													Hillary vs. Trump
 												</h1>
 												<div class="clear"></div>
@@ -303,8 +302,8 @@
 											<h2 class="mb-30">Try it yourself!</h2>
 										</div>
 										<div class="column width-8">
-                    						<input type="text" id="source" style="color: black !important;"></input>
-						                      <input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
+											<input type="text" id="source" style="color: black !important;"></input>
+											<input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -325,69 +324,17 @@
 							<div class="column width-6">
 								<h2 class="mb-30" style="text-align: center; color-blue;">HILLARY</h2>
 								 <ul class="timeline vertical-indication" id="Hillary-results">
-								 <script>
-								 	//    we will use a container to place our blocks.
-									//     fetch the element by id and store it in a variable.
-									var container = document.getElementById('Hillary-results');
-
-									function block(html) {
-									    //extra html you want to store.
-									    return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>' +
-									    html + '</h5></div></div></li>';
-									}
-
-									//    code that loops and makes the blocks.
-									for (var i = 0; i < n; i++) {
-									    // append the result of function 'block()' to the innerHTML
-									    // of the container.
-									    container.innerHTML += block(''block', 'data'');
-									}
-							     </script>
-
-							</ul>
+								 </ul>
 							</div>
 							<div class="column width-6">
-								<h2 class="mb-30 color-red" style="text-align: center;">TRUMP</h2>
-								<ul class="timeline vertical-indication">
-									<li>
-										<div class="row">
-											<div class="timeline-title column width-3 right left-on-mobile">
-												<h5>Page 1</h5>
-											</div>
-											<div class="timeline-description column width-9">
-												<h5>Filler text for article name</h5>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="row">
-											<div class="timeline-title column width-3 right left-on-mobile">
-												<h5>Page 2</h5>
-											</div>
-											<div class="timeline-description column width-9">
-												<h5>Filler text for article name</h5>
-											</div>
-										</div>
-									</li>
-									<li>
-										<div class="row">
-											<div class="timeline-title column width-3 right left-on-mobile">
-												<h5>Page 3</h5>
-											</div>
-											<div class="timeline-description column width-9">
-												<h5>Filler text for article name</h5>
-											</div>
-										</div>
-									</li>
-								</ul>			
+								<h2 class="mb-30 color-blue" style="text-align: center; color-blue;">TRUMP</h2>
+								 <ul class="timeline vertical-indication" id="Trump-results">
+								 </ul>
 							</div>
 						</div>
 					</div>
 				</section>
 				<!-- Portfolio Content End -->
-
-
-
 			</div>
 			<!-- Content End -->
 
@@ -399,10 +346,8 @@
 							<div class="widget">
 								<h4>A HackMIT Project</h4>
 								<p>This project is solely for entertainment purposes and not to be taken seriously.</p>
-
 							</div>
 						</div>
-
 					</div>
 				</div>
 			</footer>
@@ -416,20 +361,44 @@
 	<script src="http://maps.googleapis.com/maps/api/js?v=3"></script>
 	<script src="js/timber.master.min.js"></script>
     <script>
-        function wiki() {
-            var source = ${'#source'}
-            var clinton = {}.val();
-            var trump = {};
-            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
-                success: function(result){clinton = result;}});
-            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
-                success: function(result){trump = result;}});
-            var res = {
-                clinton: clinton,
-                trump: trump
-            };
-            console.log(res);
-        }
+				$(document).ready(function(){
+
+					function fillBlock(id) {
+						return function (result) {
+							var container = document.getElementById(id);
+							function block(count, article) {
+								return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>Article ' +
+								count + '</h5><div class="timeline-description column width-9"><h5 href= ' +
+								article + '>' +
+								article'</h5></div></div></div></li>';
+							}
+							for (var i = 0, var len = result.path.length; i < len; i++) {
+								container.innerHTML += block(i, result.path[i]);
+							}
+						}
+					}
+
+					function wiki() {
+							var source = $('#source').val();
+							$.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+								crossDomain: true,
+    							dataType: 'json',
+								success: fillBlock('Hillary-results')
+							});
+							$.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+								crossDomain: true,
+    							dataType: 'json',
+								success: fillBlock('Trump-results')
+							});
+					}
+			    $('#go').on('click',function(){
+			        wiki();
+					});
+			});
     </script>
 </body>
 </html>
