@@ -359,8 +359,8 @@
     <script>
 				$(document).ready(function(){
 					function wiki() {
-							var source = $('#source');
-							var clinton = {}.val();
+							var source = $('#source').val();
+							var clinton = {};
 							var trump = {};
 							$.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 									success: function(result){clinton = result;}});
