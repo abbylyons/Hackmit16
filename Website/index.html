@@ -364,7 +364,9 @@
 				$(document).ready(function(){
 
 					function fillBlock(id) {
+						console.log("id: " + id);
 						return function (result) {
+							console.log("result: " + result);
 							var container = document.getElementById(id);
 							function block(count, article) {
 								return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>Article ' +
@@ -376,7 +378,7 @@
 							for (var i = 0; i < len; i++) {
 								container.innerHTML += block(i, result.path[i]);
 							}
-						}
+						};
 					}
 
 					function wiki() {
