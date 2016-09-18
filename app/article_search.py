@@ -53,3 +53,12 @@ q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(en
 q.addRequestedResult(RequestArticlesInfo(count=50))   # return event details for last 100 events
 results = er.execQuery(q)
 print results
+
+query = QueryArticles(keywords = "Hillary Clinton")
+corr.loadInputDataWithQuery(query)
+
+conceptInfo = corr.getTopConceptCorrelations(
+    conceptType = ["person", "org"],
+    exactCount = 10,
+    approxCount = 100)
+print conceptInfo
