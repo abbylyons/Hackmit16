@@ -292,7 +292,7 @@
 											<a href="#results" id="go" class="scroll-link button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30">Let's go!</a>
 										</div>
 										<div class="column width-8 offset-4 left">
-											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
+											<p class="lead">Enter any topic and our algorithm will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
 										</div>
 									</div>
 								</div>
@@ -312,14 +312,17 @@
 								<h2 class="mb-30 color-blue" style="text-align: center;">HILLARY</h2>
 								 <ul class="timeline vertical-indication" id="Hillary-results">
 								 </ul>
-								 <h5 class="mb-20" style="text-align: center;"><span id="Hillary-views"></span></h5>
+								 <button class="border-grey bkg-hover-grey rounded color-hover-white mb-20" style="text-align: center;"><span id="Hillary-views"></span></button>
+								 <!-- insert Hillary graph -->
 								 <br />
 							</div>
 							<div class="column width-6">
 								<h2 class="mb-30 color-red" style="text-align: center;">TRUMP</h2>
 								 <ul class="timeline vertical-indication" id="Trump-results">
 								 </ul>
-								 <h5 class="mb-20" style="text-align: center;"><span id="Trump-views"></span></h5>
+								 <!-- insert Trump graph -->
+								 <button class="border-grey bkg-hover-grey rounded color-hover-white mb-20" style="text-align: center;"><span id="Trump-views"></span></button>
+								 
 								 <br />
 							</div>
 						</div>
@@ -382,7 +385,6 @@
 								container.innerHTML += block(i+1, result.path[i], color);
 							}
 							document.getElementById('loader').innerHTML = "";
-							container.innerHTML = '<h5 class="color-' + color + '"> On average, Hillary&#8217;s Wikipedia page has had' + Math.round(result.avg) + 'views per day</h5>';
 						}
 
 						var source = $('#source').val();
