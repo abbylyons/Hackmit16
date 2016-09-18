@@ -362,14 +362,20 @@
 							var source = $('#source').val();
 							var clinton = {};
 							var trump = {};
-							$.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
-									success: function(result){clinton = result;}});
-							$.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
-									success: function(result){trump = result;}});
-							var res = {
-									clinton: clinton,
-									trump: trump
-							};
+							$.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+								crossDomain: true,
+    						dataType: 'jsonp',
+								success: function(result){clinton = result;}
+							});
+							$.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+								crossDomain: true,
+    						dataType: 'jsonp',
+								success: function(result){trump = result;}
+							});
 							console.log(res);
 					}
 			    $('#go').on('click',function(){
