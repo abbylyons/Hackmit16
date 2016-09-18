@@ -64,8 +64,8 @@ def trumpArticles(query):
 	return queryCount
 
 if __name__ == "__main__":
-    print hillaryArticles("gun")
-    print trumpArticles("gun")
+    print hillaryArticles("bomb")
+    print trumpArticles("bomb")
 
 ####################
 
