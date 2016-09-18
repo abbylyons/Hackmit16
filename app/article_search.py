@@ -1,7 +1,7 @@
 import eventregistry
 from eventregistry import *
 from bs4 import BeautifulSoup
-from json import dumps
+import json
 import requests
 from datetime import date
 from datetime import timedelta
@@ -11,7 +11,7 @@ from datetime import timedelta
 def visible(element):
     if element.parent.name in ['style', 'script', '[document]', 'head', 'title']:
         return False
-    elif re.match('<!--.*-->', str(element)):
+    elif isinstance(element, Comment):
         return False
     return True
 
@@ -23,34 +23,54 @@ def hillaryArticles(query):
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Hillary Clinton"))   
-	q.addRequestedResult(RequestArticlesInfo(count=200))
-	results = er.execQuery(q)
+	q.addRequestedResult(RequestArticlesInfo(count=50))
+	results = (er.execQuery(q))['articles']['results']
+	queryCount = 0
 	for result in results:
+		# get all the text from the articles
 		url = result["url"]
 		r = urllib.urlopen(url).read()
-		soup = BeautifulSoup(r)
-		texts = soup.findAll(text=True)
-		visible_texts = filter(visible, texts)
-		return visible_texts
+		soup = BeautifulSoup(r, "lxml")
+		for script in soup(["script", "style"]): 		# kill all script and style elements
+			script.extract()
+		text = soup.get_text()
+		lines = (line.strip() for line in text.splitlines())
+		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+		text = '\n'.join(chunk for chunk in chunks if chunk)
+
+		# look for query
+		if query in text:
+			++queryCount
+	return queryCount
 
 # Get articles for Frump
-def hillaryArticles(query):
+def trumpArticles(query):
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Donald Trump"))   
-	q.addRequestedResult(RequestArticlesInfo(count=200))
-	results = er.execQuery(q)
+	q.addRequestedResult(RequestArticlesInfo(count=50))
+	results = (er.execQuery(q))['articles']['results']
+	queryCount = 0
 	for result in results:
+		# get all the text from the articles
 		url = result["url"]
 		r = urllib.urlopen(url).read()
-		soup = BeautifulSoup(r)
-		texts = soup.findAll(text=True)
-		visible_texts = filter(visible, texts)
-		return visible_texts
+		soup = BeautifulSoup(r, "lxml")
+		for script in soup(["script", "style"]): 		# kill all script and style elements
+			script.extract()
+		text = soup.get_text()
+		lines = (line.strip() for line in text.splitlines())
+		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+		text = '\n'.join(chunk for chunk in chunks if chunk)
+
+		# look for query
+		if query in text:
+			++queryCount
+	return queryCount
 
 if __name__ == "__main__":
-    print hillaryArticles("girl scout")
-    print trumpArticles("girl scout")
+    print hillaryArticles("gun")
+    print trumpArticles("gun")
 
 ####################
 
