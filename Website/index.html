@@ -313,7 +313,7 @@
 								 <ul class="timeline vertical-indication" id="Hillary-results">
 								 </ul>
 								 <div class="box medium bkg-blue rounded color-white" style="text-align: center;"><span id="Hillary-views">Placeholder for avg number views span id = Hillary-views</span></div>
-								 <!-- insert Hillary graph -->
+							 	<div id="hillary-chart"></div>
 								  <blockquote class="border">
 								 	<span class="icon-quote"></span>
 									<p><span id="Hillary-news">In the past few days, your topic has been mentioned x times in all Hillary news articles span id = Hillary-news</span></p>
@@ -325,7 +325,7 @@
 								 <ul class="timeline vertical-indication" id="Trump-results">
 								 </ul>
 								 <div class="box medium bkg-red rounded color-white" style="text-align: center;"><span id="Trump-views">Placeholder for avg number views span id = Trump-views</span></div>
-								 <!-- insert Trump graph -->
+								 <div id="trump-chart"></div>
 								 <blockquote class="border">
 								 	<span class="icon-quote"></span>
 									<p><span id="Trump-news">In the past few days, your topic has been mentioned x times in all Trump news articles span id = Trump-news</span></p>
@@ -362,10 +362,37 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maps.googleapis.com/maps/api/js?v=3"></script>
 	<script src="js/timber.master.min.js"></script>
+	<script src="http://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
     <script>
 				$(document).ready(function(){
 
 					function wiki() {
+
+						function addGraph(views, name, container) {
+							var points = []
+							views.forEach(function(count){
+								points.push({
+									label: " ",
+									y: count
+								});
+							});
+							var chart = new CanvasJS.Chart(container, {
+								title:{
+									text: "Interest in " + name + " in Past 30 Days"              
+								},
+
+								data: [              
+								{
+									// Change type to "doughnut", "line", "splineArea", etc.
+									type: "line",
+									dataPoints: points
+								}
+								]
+							});
+							chart.render();
+						}
+
 						document.getElementById('loader').innerHTML = "<h1>Searching...</h1><br />";
 						// document.getElementById('results').scrollIntoView({block: 'start', behavior: 'smooth'});
 						document.getElementById('Hillary-results').innerHTML = '';
