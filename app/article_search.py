@@ -74,29 +74,21 @@ if __name__ == "__main__":
 
 ####################
 
+
+start = unicode(date.today() + timedelta(-30))
+
 er = EventRegistry()
 q = GetCounts(er.getConceptUri("Clinton"),
               source = "news",
               startDate = start, endDate = end)
-#print er.execQuery(q)
+results = er.execQuery(q)
 
 # Determine occurrence of Hillary or Trump in news of period of time
 er = EventRegistry()
 q = GetCounts(er.getConceptUri("Trump"),
               source = "news",
               startDate = start, endDate = end)
-print er.execQuery(q)
+results = er.execQuery(q)
 
 
-start = unicode(date.today() + timedelta(-3))
 
-# Get most recent articles
-er = EventRegistry()
-q = QueryEvents(lang=["eng"],dateStart=start,dateEnd=end)
-q.addConcept(er.getConceptUri("Hillary Clinton"))
-q.addConcept(er.getConceptUri("Donald Trump"))
-# return event details for largest 50 events
-q.addRequestedResult(RequestEventsInfo(count = 50, sortBy = "size", sortByAsc = False))   
-     
-# execute the query
-print er.execQuery(q)
