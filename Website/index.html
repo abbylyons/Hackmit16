@@ -412,7 +412,7 @@
 
 						function fillBlock(id, result, color) {
 							var container = document.getElementById(id);
-							container.innerHTML = '<h5 class="color-' + color + '"> Average degrees of seperation: ' + Math.round(result.avg) + '</h5>';
+							container.innerHTML = '<h5 class="color-' + color + '"> Average degrees of separation: ' + Math.round(result.avg) + '</h5>';
 							container.innerHTML += '<h5 class="color-' + color + '"> Shortest path:</h5>';
 							var len = result.path.length;
 							for (var i = 0; i < len; i++) {
