@@ -303,7 +303,7 @@
 											<h2 class="mb-30">Try it yourself!</h2>
 										</div>
 										<div class="column width-8">
-											<form>
+											<form action="#results">
 												<input type="text" id="source" style="color: black !important;"></input>
 												<input type="submit" value="Let's go!" class="bkg-red border-hover-red color-white color-hover-red"></input>
 											</form>
@@ -320,10 +320,69 @@
 				<!-- Stat Section 1 -->
 
 				<!-- Portfolio Content -->
-				<section class="section-block replicable-content no-padding-bottom">
+				<section class="section-block replicable-content no-padding-bottom" id="results">
 					<div class="row">
-						<div class="column width-6 offset-3 center">
-							<h2 class="mb-50">Results</h2>
+						<div class="column width-12">
+							<h2 class="mb-50" style="text-align: center; margin-top: -5%;">Results</h2>
+							<div class="column width-6">
+								<h2 class="mb-30" style="text-align: center; color-blue;">HILLARY</h2>
+								 <ul class="timeline vertical-indication" id="Hillary-results">
+								 <script>
+								 	//    we will use a container to place our blocks.
+									//     fetch the element by id and store it in a variable.
+									var container = document.getElementById('Hillary-results');
+
+									function block(html) {
+									    //extra html you want to store.
+									    return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>' +
+									    html + '</h5></div></div></li>';
+									}
+
+									//    code that loops and makes the blocks.
+									for (var i = 0; i < n; i++) {
+									    // append the result of function 'block()' to the innerHTML
+									    // of the container.
+									    container.innerHTML += block(''block', 'data'');
+									}
+							     </script>
+
+							</ul>
+							</div>
+							<div class="column width-6">
+								<h2 class="mb-30 color-red" style="text-align: center;">TRUMP</h2>
+								<ul class="timeline vertical-indication">
+									<li>
+										<div class="row">
+											<div class="timeline-title column width-3 right left-on-mobile">
+												<h5>Page 1</h5>
+											</div>
+											<div class="timeline-description column width-9">
+												<h5>Filler text for article name</h5>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="timeline-title column width-3 right left-on-mobile">
+												<h5>Page 2</h5>
+											</div>
+											<div class="timeline-description column width-9">
+												<h5>Filler text for article name</h5>
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="row">
+											<div class="timeline-title column width-3 right left-on-mobile">
+												<h5>Page 3</h5>
+											</div>
+											<div class="timeline-description column width-9">
+												<h5>Filler text for article name</h5>
+											</div>
+										</div>
+									</li>
+								</ul>			
+							</div>
 						</div>
 					</div>
 				</section>
