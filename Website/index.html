@@ -372,7 +372,8 @@
 								article + '>' +
 								article + '</h5></div></div></div></li>';
 							}
-							for (var i = 0, var len = result.path.length; i < len; i++) {
+							var len = result.path.length;
+							for (var i = 0; i < len; i++) {
 								container.innerHTML += block(i, result.path[i]);
 							}
 						}
