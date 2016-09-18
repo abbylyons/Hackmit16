@@ -353,6 +353,8 @@
 					function wiki() {
 						document.getElementById('loader').innerHTML = "<h1>Searching...</h1><br />";
 						// document.getElementById('results').scrollIntoView({block: 'start', behavior: 'smooth'});
+						document.getElementById('Hillary-results').innerHTML = '';
+						document.getElementById('Trump-results').innerHTML = '';
 						function block(count, article, color) {
 							return(
 								'<li>' +
