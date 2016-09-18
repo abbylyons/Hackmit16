@@ -304,7 +304,7 @@
 										</div>
 										<div class="column width-8">
                     	<input type="text" id="source" style="color: black !important;"></input>
-                      <input type="submit" value="Let's go!" onclick="wiki()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
+                      <input type="submit" value="Let's go!" id="go" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -357,20 +357,25 @@
 	<script src="http://maps.googleapis.com/maps/api/js?v=3"></script>
 	<script src="js/timber.master.min.js"></script>
     <script>
-        function wiki() {
-            var source = $('#source');
-            var clinton = {}.val();
-            var trump = {};
-            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
-                success: function(result){clinton = result;}});
-            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
-                success: function(result){trump = result;}});
-            var res = {
-                clinton: clinton,
-                trump: trump
-            };
-            console.log(res);
-        }
+				$(document).ready(function(){
+					function wiki() {
+							var source = $('#source');
+							var clinton = {}.val();
+							var trump = {};
+							$.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+									success: function(result){clinton = result;}});
+							$.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+									success: function(result){trump = result;}});
+							var res = {
+									clinton: clinton,
+									trump: trump
+							};
+							console.log(res);
+					}
+			    $('#go').on('click',function(){
+			        wiki();
+					});
+			});
     </script>
 </body>
 </html>
