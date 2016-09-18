@@ -358,37 +358,36 @@
 	<script src="js/timber.master.min.js"></script>
     <script>
 				$(document).ready(function(){
-					var res = {}
-					function clintonCallback(result) {
-						res.clinton = result.clinton;
-						if (res.trump) {
-							console.log(res);
-						}
-						console.log(result);
-					}
-					function trumpCallback(result) {
-						res.trump = result.trump;
-						if (res.clinton) {
-							console.log(res);
-						}
-						console.log(result);
-					}
 					function wiki() {
 							var source = $('#source').val();
-							res = {}
+							var res = {}
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
+								jsonp: "callback",
     						dataType: 'jsonp',
-								callback: clintonCallback
+								success: function(result){
+									res.clinton = result.clinton;
+									if (res.trump) {
+										console.log(res);
+									}
+									console.log(result);
+								}
 							});
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
+								jsonp: "callback",
     						dataType: 'jsonp',
-								callback: trumpCallback
+								success: function(result){
+									res.trump = result.trump;
+									if (res.clinton) {
+										console.log(res);
+									}
+									console.log(result);
+								}
 							});
 					}
 			    $('#go').on('click',function(){
