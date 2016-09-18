@@ -25,23 +25,31 @@ results = er.execQuery(q)
 
 ####################
 
+er = EventRegistry()
+q = GetCounts(er.getConceptUri("Clinton"),
+              source = "news",
+              startDate = start, endDate = end)
+print er.execQuery(q)
+
 # Determine occurrence of Hillary or Trump in news of period of time
-# er = EventRegistry()
-# q = GetCounts(er.getConceptUri("Clinton"),
-#               source = "news",
-#               startDate = start, endDate = end)
-# print er.execQuery(q)
+er = EventRegistry()
+q = GetCounts(er.getConceptUri("Trump"),
+              source = "news",
+              startDate = start, endDate = end)
+print er.execQuery(q)
 
-# # Determine occurrence of Hillary or Trump in news of period of time
-# er = EventRegistry()
-# q = GetCounts(er.getConceptUri("Trump"),
-#               source = "news",
-#               startDate = start, endDate = end)
-# print er.execQuery(q)
+# Get most recent articles
+er = EventRegistry()
+q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
+q.addRequestedResult(RequestArticlesInfo(count=50))   # return event details for last 100 events
+results = er.execQuery(q)
+print results
 
-# # Get most recent articles
-# er = EventRegistry()
-# q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
-# q.addRequestedResult(RequestArticlesInfo(count=50))   # return event details for last 100 events
-# results = er.execQuery(q)
-# print results
+query = QueryArticles(keywords = "Hillary Clinton")
+corr.loadInputDataWithQuery(query)
+
+conceptInfo = corr.getTopConceptCorrelations(
+    conceptType = ["person", "org"],
+    exactCount = 10,
+    approxCount = 100)
+print conceptInfo

@@ -8,7 +8,7 @@
 
 	<!-- Font -->
 	<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,700%7CLato:300,400,700' rel='stylesheet' type='text/css'>
-	
+
 	<!-- Css -->
 	<link rel="stylesheet" href="css/core.min.css" />
 	<link rel="stylesheet" href="css/skin.css" />
@@ -226,7 +226,7 @@
 									<li>
 										<a href="about-style-one.html">Who we are</a>
 									</li>
-											
+
 								</ul>
 							</nav>
 						</div>
@@ -303,10 +303,8 @@
 											<h2 class="mb-30">Try it yourself!</h2>
 										</div>
 										<div class="column width-8">
-											<form>
-												<input type="text" id="source" style="color: black !important;"></input>
-												<input type="submit" value="Let's go!" class="bkg-red border-hover-red color-white color-hover-red"></input>
-											</form>
+                    	<input type="text" id="source" style="color: black !important;"></input>
+                      <input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -329,7 +327,7 @@
 				</section>
 				<!-- Portfolio Content End -->
 
-				
+
 
 			</div>
 			<!-- Content End -->
@@ -342,10 +340,10 @@
 							<div class="widget">
 								<h4>A HackMIT Project</h4>
 								<p>This project is solely for entertainment purposes and not to be taken seriously.</p>
-								
+
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 			</footer>
@@ -358,5 +356,21 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maps.googleapis.com/maps/api/js?v=3"></script>
 	<script src="js/timber.master.min.js"></script>
+    <script>
+        function wiki() {
+            var source = ${'#source'}
+            var clinton = {}.val();
+            var trump = {};
+            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+                success: function(result){clinton = result;}});
+            $.ajax({url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+                success: function(result){trump = result;}});
+            var res = {
+                clinton: clinton,
+                trump: trump
+            };
+            console.log(res);
+        }
+    </script>
 </body>
 </html>
