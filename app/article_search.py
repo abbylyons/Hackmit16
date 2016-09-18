@@ -63,26 +63,31 @@ def trumpArticles(query):
 
 	return queryCount
 
-if __name__ == "__main__":
-    print hillaryArticles("gun")
-    print trumpArticles("gun")
 
 ####################
 
+# Determine occurrence of Hillary or Trump in news of period of time
+
 start = unicode(date.today() + timedelta(-30))
 
-er = EventRegistry()
-q = GetCounts(er.getConceptUri("Clinton"),
-              source = "news",
-              startDate = start, endDate = end)
-print er.execQuery(q)
+def hillaryViews():
+	er = EventRegistry()
+	q = GetCounts(er.getConceptUri("Clinton"),
+	              source = "news",
+	              startDate = start, endDate = end)
+	return (er.execQuery(q))['count']
 
-# Determine occurrence of Hillary or Trump in news of period of time
-er = EventRegistry()
-q = GetCounts(er.getConceptUri("Trump"),
-              source = "news",
-              startDate = start, endDate = end)
-print er.execQuery(q)
+def trumpViews():
+	er = EventRegistry()
+	q = GetCounts(er.getConceptUri("Trump"),
+	              source = "news",
+	              startDate = start, endDate = end)
+	return (er.execQuery(q))['count']
 
 
+if __name__ == "__main__":
+    print hillaryArticles("gun")
+    print trumpArticles("gun")
+    print hillaryViews()
+    print trumpViews()
 
