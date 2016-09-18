@@ -1,6 +1,7 @@
 import eventregistry
 from eventregistry import *
 from bs4 import BeautifulSoup
+import lxml
 import json
 import requests
 from datetime import date
@@ -15,18 +16,24 @@ def visible(element):
         return False
     return True
 
-start = unicode(date.today() + timedelta(-2))
+start = unicode(date.today() + timedelta(-3))
 end = unicode(date.today())
 
 # Get articles for Shillary
-def hillaryArticles(query):
+def hillaryArticles():
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Hillary Clinton"))   
-	q.addRequestedResult(RequestArticlesInfo(count=50))
+	q.addRequestedResult(RequestArticlesInfo())
 	results = (er.execQuery(q))['articles']['results']
+	return results
+
+def searchHillaryArticles(query,results):
+	iteration = 0
 	queryCount = 0
 	for result in results:
+		if iteration > 50
+			break
 		# get all the text from the articles
 		url = result["url"]
 		r = urllib.urlopen(url).read()
@@ -37,6 +44,8 @@ def hillaryArticles(query):
 		lines = (line.strip() for line in text.splitlines())
 		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
 		text = '\n'.join(chunk for chunk in chunks if chunk)
+
+		++iteration
 
 		# look for query
 		if query in text:
@@ -44,14 +53,19 @@ def hillaryArticles(query):
 	return queryCount
 
 # Get articles for Frump
-def trumpArticles(query):
+def trumpArticles():
 	er = EventRegistry()
 	q = QueryArticles(lang=["eng"], dateStart = unicode(start), dateEnd = unicode(end))
 	q.addConcept(er.getConceptUri("Donald Trump"))   
-	q.addRequestedResult(RequestArticlesInfo(count=50))
+	q.addRequestedResult(RequestArticlesInfo())
 	results = (er.execQuery(q))['articles']['results']
+	return results
+
+def searchTrumpArticles(query,results):
+	iteration = 0
 	queryCount = 0
 	for result in results:
+		if iteration > 50
 		# get all the text from the articles
 		url = result["url"]
 		r = urllib.urlopen(url).read()
@@ -63,40 +77,40 @@ def trumpArticles(query):
 		chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
 		text = '\n'.join(chunk for chunk in chunks if chunk)
 
+		++iteration
+
 		# look for query
 		if query in text:
 			++queryCount
 	return queryCount
 
 if __name__ == "__main__":
-    print hillaryArticles("gun")
-    print trumpArticles("gun")
+	hillary_articles = hillaryArticles()
+	trump_articles = trumpArticles()
+    print searchHillaryArticles("gun",hillary_articles)
+    print searchTrumpArticles("gun",trump_articles)
+
+    # prints number of articles in past 3 days about both presidential candidates
+    print len(hillary_articles)
+    print len(trump_articles)
 
 ####################
+
+
+start = unicode(date.today() + timedelta(-30))
 
 er = EventRegistry()
 q = GetCounts(er.getConceptUri("Clinton"),
               source = "news",
               startDate = start, endDate = end)
-#print er.execQuery(q)
+results = er.execQuery(q)
 
 # Determine occurrence of Hillary or Trump in news of period of time
 er = EventRegistry()
 q = GetCounts(er.getConceptUri("Trump"),
               source = "news",
               startDate = start, endDate = end)
-print er.execQuery(q)
+results = er.execQuery(q)
 
 
-start = unicode(date.today() + timedelta(-3))
 
-# Get most recent articles
-er = EventRegistry()
-q = QueryEvents(lang=["eng"],dateStart=start,dateEnd=end)
-q.addConcept(er.getConceptUri("Hillary Clinton"))
-q.addConcept(er.getConceptUri("Donald Trump"))
-# return event details for largest 50 events
-q.addRequestedResult(RequestEventsInfo(count = 50, sortBy = "size", sortByAsc = False))   
-     
-# execute the query
-print er.execQuery(q)
