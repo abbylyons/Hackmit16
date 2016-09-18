@@ -305,33 +305,34 @@
 				<!-- Portfolio Content -->
 				<section class="section-block replicable-content no-padding-bottom" id="results">
 					<div class="row">
-								
+
 						<div class="column width-12" style="margin-top: -4%;">
 							<span class="mb-50" style="text-align: center;" id="loader"></span>
 							<div class="column width-6">
 								<h2 class="mb-30" style="text-align: center; letter-spacing: 2px; color: rgb(35, 32, 102);">HILLARY</h2>
-								 <ul class="timeline vertical-indication" id="Hillary-results">
-								 </ul>
-								 <div class="box medium rounded color-white" style="text-align: center; background-color: rgb(35, 32, 102);"><span id="Hillary-views">Placeholder for avg number views span id = Hillary-views</span></div>
-								 <div id="hillary-chart"></div>
-								  <blockquote class="border">
-								 	<span class="icon-quote"></span>
-									<p><span id="Hillary-news">In the past few days, your topic has been mentioned x times in all Hillary news articles span id = Hillary-news</span></p>
+								<ul class="timeline vertical-indication" id="Hillary-results">
+								</ul>
+								<div class="box medium rounded color-white" style="text-align: center; background-color: rgb(35, 32, 102);">In the past month Hillary's Wikipedia article has been visited <span id="hillary-views">...</span> times</div>
+								<div id="hillary-chart" style="height: 500px;"></div>
+								<br/>
+								<blockquote class="border">
+									<span class="icon-quote"></span>
+                                	<p>In the past few days, your topic has been mentioned <span id="hillary-news">...</span> times in all Hillary news articles.</p>
 								</blockquote>
-								 <br />
+								<br />
 							</div>
 							<div class="column width-6">
 								<h2 class="mb-30" style="text-align: center; letter-spacing: 2px; color: rgb(233, 29, 14)">TRUMP</h2>
-								 <ul class="timeline vertical-indication" id="Trump-results">
-								 </ul>
-								 <div class="box medium bkg-red rounded color-white" style="text-align: center;"><span id="Trump-views">Placeholder for avg number views span id = Trump-views</span></div>
-								 <div id="trump-chart"></div>
-								 <blockquote class="border">
-								 	<span class="icon-quote"></span>
-									<p><span id="Trump-news">In the past few days, your topic has been mentioned x times in all Trump news articles span id = Trump-news</span></p>
+								<ul class="timeline vertical-indication" id="Trump-results">
+								</ul>
+								<div class="box medium bkg-red rounded color-white" style="text-align: center;">In the past month Trump's Wikipedia article has been visited <span id="trump-views">...</span> times</div>
+								<div id="trump-chart" style="height: 500px;"></div>
+								<br/>
+								<blockquote class="border">
+									<span class="icon-quote"></span>
+                                	<p>In the past few days, your topic has been mentioned <span id="trump-news">...</span> times in all Trump news articles.</p>
 								</blockquote>
-
-								 <br />
+							 	<br />
 							</div>
 						</div>
 					</div>
@@ -369,20 +370,27 @@
 
 					function wiki() {
 
-						function addGraph(views, name, container) {
+                        function addArticleCount(count, container) {
+                            document.getElementById(container).innerHTML = count;
+                        }
+
+						function addGraph(views, name, chartContainer, viewsContainer) {
 							var points = []
+							var total = 0
 							views.forEach(function(count){
 								points.push({
 									label: " ",
 									y: count
 								});
+								total += count;
 							});
-							var chart = new CanvasJS.Chart(container, {
+							document.getElementById(viewsContainer).innerHTML = total;
+							var chart = new CanvasJS.Chart(chartContainer, {
 								title:{
-									text: "Interest in " + name + " in Past 30 Days"              
+									text: "Interest in " + name + " in Past 30 Days"
 								},
 
-								data: [              
+								data: [
 								{
 									// Change type to "doughnut", "line", "splineArea", etc.
 									type: "line",
@@ -394,7 +402,6 @@
 						}
 
 						document.getElementById('loader').innerHTML = "<h1>Searching...</h1><br />";
-						// document.getElementById('results').scrollIntoView({block: 'start', behavior: 'smooth'});
 						document.getElementById('Hillary-results').innerHTML = '';
 						document.getElementById('Trump-results').innerHTML = '';
 						function block(count, article, color) {
@@ -442,6 +449,27 @@
 									fillBlock('Trump-results', result, 'charcoal');
 								}
 							});
+                            $.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/articles/" + source,
+								crossDomain: true,
+								dataType: 'json',
+								success: function (result) {
+                                    addArticleCount(result.hillary, "hillary-news");
+                                    addArticleCount(result.trump, "trump-news");
+								}
+							});
+                            $.ajax({
+								type: 'GET',
+								url: "http://wiki-crawler.herokuapp.com/views",
+								crossDomain: true,
+								dataType: 'json',
+								success: function (result) {
+                                    addGraph(result.hillary, "Hillary", "hillary-chart", "hillary-views");
+                                    addGraph(result.trump, "Trump", "trump-chart", "trump-views");
+								}
+							});
+
 						}
 					}
 			    $('#go').on('click',function(){
