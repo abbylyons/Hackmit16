@@ -215,20 +215,6 @@
 									</li>
 								</ul>
 							</nav>
-							<nav class="navigation nav-block primary-navigation nav-right">
-								<ul>
-									<li class="current">
-										<a href="index-with-parallax.html">Home</a>
-									</li>
-									<li>
-										<a href="about-style-one.html">How it works</a>
-									</li>
-									<li>
-										<a href="about-style-one.html">Who we are</a>
-									</li>
-
-								</ul>
-							</nav>
 						</div>
 					</div>
 				</div>
@@ -285,7 +271,7 @@
 					<div class="row">
 						<div class="column width-8 offset-2 center horizon" data-animate-in="preset:slideInUpShort;duration:1000ms;" data-threshold="0.5">
 							<p class="lead text-large weight-bold "><span style="color: rgb(35, 35, 35); !important">How many clicks do you need to go from Hitler to</span> <span style="color: #232066; !important">Hillary</span><span style="color: rgb(35, 35, 35); !important"> on Wikipedia? What about China to</span> <span style="color: #E91D0E; !important">Trump</span>? </p>
-							<a href="#app" class="scroll-link button medium bkg-charcoal bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical">Find out now</a>
+							<a href="#app" class="scroll-link button medium bkg-charcoal bkg-hover-pink color-white color-hover-white mb-30">Find out now</a>
 						</div>
 					</div>
 				</div>
@@ -303,7 +289,7 @@
 										</div>
 										<div class="column width-8">
 											<input type="text" id="source" style="color: black !important;"></input>
-											<input type="submit" value="Let's go!" on-click="submit()" class="button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30 text-line-vertical"></input>
+											<a href="#results" id="go" class="scroll-link button medium bkg-pink bkg-hover-pink color-white color-hover-white mb-30">Let's go!</a>
 										</div>
 										<div class="column width-8 offset-4 left">
 											<p class="lead">Enter any topic and our algorithms will look for the shortest path from said topic to each presidential candidate on Wikipedia. </p>
@@ -319,6 +305,7 @@
 				<!-- Portfolio Content -->
 				<section class="section-block replicable-content no-padding-bottom" id="results">
 					<div class="row">
+						<span class="mb-50 column width-12" style="text-align: center;" id="loader"></span>
 						<div class="column width-12">
 							<h2 class="mb-50" style="text-align: center; margin-top: -5%;">Results</h2>
 							<div class="column width-6">
@@ -363,44 +350,60 @@
     <script>
 				$(document).ready(function(){
 
-					function fillBlock(id) {
-						console.log("id: " + id);
-						return function (result) {
-							console.log("result: " + result);
+					function wiki() {
+						document.getElementById('Hillary-results').innerHTML = '';
+						document.getElementById('Trump-results').innerHTML = '';
+						document.getElementById('loader').innerHTML = "<h1>Searching...</h1>";
+						function block(count, article, color) {
+							return(
+								'<li>' +
+									'<div class="row">'+
+										'<div class="timeline-title column width-3 right left-on-mobile">'+
+											'<h5 class="color-' + color + '">Article ' + count + '</h5>' +
+										'</div>' +
+										'<div class="timeline-description column width-9">'+
+											'<a target="_blank" href="https://en.wikipedia.org/wiki/' + article + '">' + article + '</a>'+
+										'</div>'+
+									'</div>'+
+								'</li>');
+						}
+
+						function fillBlock(id, result, color) {
 							var container = document.getElementById(id);
-							function block(count, article) {
-								return '<li><div class="row"><div class="timeline-title column width-3 right left-on-mobile"><h5>Article ' +
-								count + '</h5><div class="timeline-description column width-9"><h5 href= ' +
-								article + '>' +
-								article + '</h5></div></div></div></li>';
-							}
+							container.innerHTML = '<h5 class="color-' + color + '"> Average distance: ' + result.avg + '</h5>';
+							container.innerHTML += '<h5 class="color-' + color + '"> Shortest path:</h5>';
 							var len = result.path.length;
 							for (var i = 0; i < len; i++) {
-								container.innerHTML += block(i, result.path[i]);
+								container.innerHTML += block(i+1, result.path[i], color);
 							}
-						};
-					}
+							document.getElementById('loader').innerHTML = "";
+						}
 
-					function wiki() {
-							var source = $('#source').val();
+						var source = $('#source').val();
+						if (source) {
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
-    							dataType: 'json',
-								success: fillBlock('Hillary-results')
+								dataType: 'json',
+								success: function(result) {
+									fillBlock('Hillary-results', result, 'blue');
+								}
 							});
 							$.ajax({
 								type: 'GET',
 								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
 								crossDomain: true,
-    							dataType: 'json',
-								success: fillBlock('Trump-results')
+								dataType: 'json',
+								success: function (result) {
+									fillBlock('Trump-results', result, 'red');
+								}
 							});
+						}
 					}
 			    $('#go').on('click',function(){
 			        wiki();
-					});
+				});
 			});
     </script>
 </body>
