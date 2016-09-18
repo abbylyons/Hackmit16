@@ -386,7 +386,7 @@
 						if (source) {
 							$.ajax({
 								type: 'GET',
-								url: "http://wiki-crawler.herokuapp.com/" + source + "/Hillary%20Clinton",
+								url: "http://wiki-crawler.herokuapp.com/wiki/" + source + "/Hillary%20Clinton",
 								crossDomain: true,
 								dataType: 'json',
 								success: function(result) {
@@ -395,7 +395,7 @@
 							});
 							$.ajax({
 								type: 'GET',
-								url: "http://wiki-crawler.herokuapp.com/" + source + "/Donald%20Trump",
+								url: "http://wiki-crawler.herokuapp.com/wiki/" + source + "/Donald%20Trump",
 								crossDomain: true,
 								dataType: 'json',
 								success: function (result) {
