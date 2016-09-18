@@ -1,8 +1,18 @@
 import eventregistry
 from eventregistry import *
 from bs4 import BeautifulSoup
-
+from json import dumps
 import requests
+from datetime import datetime
+from datetime import timedelta
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, datetime):
+        serial = obj.isoformat()
+        return serial
+    raise TypeError ("Type not serializable")
 
 # Get articles for Shillary
 er = EventRegistry()
@@ -25,8 +35,8 @@ q.addConcept(er.getConceptUri("Donald Trump"))
 q.addRequestedResult(RequestArticlesInfo(sortBy = "date", count=10))   # return event details for last 100 events
 print er.execQuery(q)
 
-start = datetime.date.today()+datetime.timedelta(-30)
-end = datetime.date.today()
+start = datetime.today() + timedelta(-30)
+end = datetime.today()
 
 # Determine occurrence of Hillary or Trump in news of period of time
 er = EventRegistry()
@@ -35,8 +45,8 @@ q = GetCounts(er.getConceptUri("Clinton"),
               startDate = start, endDate = end)
 print er.execQuery(q)
 
-start = datetime.date.today()+datetime.timedelta(-30)
-end = datetime.date.today()
+start = datetime.today() + timedelta(-30)
+end = datetime.today()
 
 # Determine occurrence of Hillary or Trump in news of period of time
 er = EventRegistry()
@@ -47,6 +57,7 @@ print er.execQuery(q)
 
 # Get most recent articles
 er = EventRegistry()
-q = QueryArticles(lang=["eng"])
-q.addRequestedResult(RequestArticlesInfo(startDate = start, endDate = end, count=50))   # return event details for last 100 events
-print er.execQuery(q)
+q = QueryArticles(lang=["eng"], dateStart = start, dateEnd = end)
+q.addRequestedResult(RequestArticlesInfo(count=50))   # return event details for last 100 events
+print dumps(datetime.today(), default=json_serial)
+results = er.execQuery(q)
